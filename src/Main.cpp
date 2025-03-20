@@ -65,7 +65,7 @@ void videoOkuGoster(string dosyaYolu)
 void webcamOkuGoster(int ch)
 {
     cv::VideoCapture video;
-    
+
     if(video.open(ch))
     {
         cout<<"webcam acildi"<<endl;
@@ -83,21 +83,66 @@ void webcamOkuGoster(int ch)
         cv::destroyAllWindows();
 
     }
+}
 
+
+void BasitResimOlustur(int genislik, int yukseklik,int blue,int green,int red)
+{
+    cv::Mat resim(genislik,yukseklik,CV_8UC3); //CV_8UC3, red,green,blue
+    resim = cv::Scalar(blue,green,red);
+    cv::namedWindow("ekran");
+    cv::imshow("ekran",resim);
+    cv::waitKey();
 
 
 }
 
+
+cv::Mat ResimdeCizgiCiz(string dosyaYolu,int x1,int y1,int x2,int y2)
+{
+    cv::Mat AsilResim = cv::imread(dosyaYolu);
+    cv::Mat CizilmisResim;
+    
+    AsilResim.copyTo(CizilmisResim); // asil resmi cizilmisresime at
+    cv::line(CizilmisResim,cv::Point(x1,y1),cv::Point(x2,y2),cv::Scalar(0,0,255),5); // (0,0) baslangic (300,300)
+    cout<<"resmin cols u "<<CizilmisResim.cols<<endl;
+
+    return CizilmisResim;
+    /* cv::namedWindow("ekran");
+    cv::imshow("ekran",CizilmisResim);
+    return CizilmisResim;*/
+}
+
+cv::Mat DikAciliDortgenCiz(string DosyaYolu)
+{
+    cv::Mat resim = cv::imread(DosyaYolu);
+    cv::rectangle(resim,cv::Point(0,0),cv::Point(300,300),cv::Scalar(0,0,255),5);
+    return resim;
+}
+
+cv::Mat ResimYaziYaz(string DosyaYolu,string yazi)
+{
+    cv::Mat resim = cv::imread(DosyaYolu);
+    cv::Mat yaziliResim ;
+    resim.copyTo(yaziliResim);
+    cv::Point p(0,70);
+    cv::putText(yaziliResim, yazi, p,cv::FONT_ITALIC,1,cv::Scalar(0,0,255),2);
+    return yaziliResim;
+}
 
 
 
 
 int main()
 {
-    webcamOkuGoster(0);
     int a  =0;
+   
+        string dosyaYolu = "C:/Users/murat/opencvtest/src/manzara.jpg";
+        cv::imshow("pencere1",ResimYaziYaz(dosyaYolu,"selam"));
 
+        cv::waitKey();
 
+    cv::destroyAllWindows();
     
 
 }
