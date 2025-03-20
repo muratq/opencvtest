@@ -1,0 +1,10 @@
+^C:\USERS\MURAT\OPENCVTEST\BUILD\CMAKEFILES\2458C49D1C61985A528556888DBDB53B\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/murat/opencvtest -BC:/Users/murat/opencvtest/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/murat/opencvtest/build/opencvtest.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
