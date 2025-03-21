@@ -108,9 +108,6 @@ cv::Mat ResimdeCizgiCiz(string dosyaYolu,int x1,int y1,int x2,int y2)
     cout<<"resmin cols u "<<CizilmisResim.cols<<endl;
 
     return CizilmisResim;
-    /* cv::namedWindow("ekran");
-    cv::imshow("ekran",CizilmisResim);
-    return CizilmisResim;*/
 }
 
 cv::Mat DikAciliDortgenCiz(string DosyaYolu)
@@ -130,6 +127,24 @@ cv::Mat ResimYaziYaz(string DosyaYolu,string yazi)
     return yaziliResim;
 }
 
+void ResimDegerleriniOku(string dosyaYolu)
+{
+    cv:: Mat resim = cv::imread(dosyaYolu);
+    cv::imshow("ekran",resim);
+    cv::waitKey();
+
+    for(int x =0; x<resim.cols;x++)
+    {
+        for(int y =0; y< resim.rows;y++)
+        {
+            cout<< resim.at<cv::Vec3b>(cv::Point(x,y))<<endl;
+        }
+    }
+
+
+}
+
+
 
 
 
@@ -137,12 +152,15 @@ int main()
 {
     int a  =0;
    
-        string dosyaYolu = "C:/Users/murat/opencvtest/src/manzara.jpg";
-        cv::imshow("pencere1",ResimYaziYaz(dosyaYolu,"selam"));
-
-        cv::waitKey();
-
-    cv::destroyAllWindows();
+    string dosyaYolu = "C:/Users/murat/opencvtest/src/manzara.jpg";
+    string pencereAdi = "pencere1";
     
-
+    cv::namedWindow(pencereAdi,cv::WINDOW_AUTOSIZE);
+    cv::setWindowTitle(pencereAdi,"Fotograf"); // ekran ismini degistirir
+    cv:: Mat resim = cv::imread(dosyaYolu);
+    cv:: imshow(pencereAdi,resim);
+    cv::resizeWindow(pencereAdi,cv::Size(800,400)); // ekranı tekrar boyutlandırıyor
+    cv::moveWindow(pencereAdi,400,0);
+    cv::waitKey();
+   
 }
