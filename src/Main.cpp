@@ -2,19 +2,21 @@
 #include <vector>
 #include <opencv2\core\core.hpp>
 #include <opencv2\opencv.hpp>
+#include <opencv2\objdetect.hpp>
 
 using namespace std;
+using namespace cv;
 
 void GorselOkuGoster(string dosyaYolu)
 {
-    cv::Mat resim;  //resim verilerini sakliyor
-    resim =  cv::imread(dosyaYolu);
+    Mat resim;  //resim verilerini sakliyor
+    resim =  imread(dosyaYolu);
     if(resim.data) // resimde bi data varsa
     {
         cout<<"dosya okuma basarili"<<endl;
-        cv::namedWindow("ekran"); // pencere olusturduk
-        cv::imshow("ekran",resim); // ekrana bastir
-        cv::waitKey(0); // tusa basilana kadar bekle
+        namedWindow("ekran"); // pencere olusturduk
+        imshow("ekran",resim); // ekrana bastir
+        waitKey(0); // tusa basilana kadar bekle
 
     }
     else
@@ -147,20 +149,59 @@ void ResimDegerleriniOku(string dosyaYolu)
 
 
 
+void detect_faces(void)
+{
+
+    /*cascade ile yüz tanıma*/
+    CascadeClassifier face_cascade;
+    if(!face_cascade.load("C:/Users/murat/opencvtest/src/haarcascade_frontalface_default.xml")){
+        cout<< "haarcascade yuklenemedi!"<<endl;
+    }
+  
+    VideoCapture cap(0);
+    if(!cap.isOpened()){
+        cout<<"kamera acilamadi"<<endl;
+    }
+    Mat frame, gray;
+    vector<Rect> faces;
+
+    while(true)
+    {
+        cap >> frame;
+        if(frame.empty())
+            break;
+        cvtColor(frame,gray,COLOR_BGR2GRAY);
+        face_cascade.detectMultiScale(gray,faces,1.1,3,0,Size(30,30));
+
+        for(size_t i = 0;i < faces.size();i++)
+        {
+            rectangle(frame,faces[i],Scalar(255,0,0),2);
+            Point p(faces[i].x, faces[i].y - 10);
+            if(faces[i].width>300)
+            {
+                putText(frame, "cok yakin", p,cv::FONT_ITALIC,1,cv::Scalar(0,0,255),2);
+            }
+
+        }
+        
+
+        imshow("yuz algilama",frame);
+
+        if (waitKey(10) == 'q') {
+            break;
+        }
+
+    }
+
+}
+
+
+
 
 int main()
 {
-    int a  =0;
-   
-    string dosyaYolu = "C:/Users/murat/opencvtest/src/manzara.jpg";
-    string pencereAdi = "pencere1";
-    
-    cv::namedWindow(pencereAdi,cv::WINDOW_AUTOSIZE);
-    cv::setWindowTitle(pencereAdi,"Fotograf"); // ekran ismini degistirir
-    cv:: Mat resim = cv::imread(dosyaYolu);
-    cv:: imshow(pencereAdi,resim);
-    cv::resizeWindow(pencereAdi,cv::Size(800,400)); // ekranı tekrar boyutlandırıyor
-    cv::moveWindow(pencereAdi,400,0);
-    cv::waitKey();
+    detect_faces();
    
 }
+
+
